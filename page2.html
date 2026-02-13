@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily IAS Quiz - Ankita</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif; /* Girlish, playful font */
+            background: linear-gradient(135deg, #ffb3ba, #ffdfba, #ffffba, #baffc9, #bae1ff); /* Soft pastel gradient */
+            background-size: 400% 400%;
+            animation: gradientShift 10s ease infinite; /* Animated background */
+            margin: 0;
+            padding: 0;
+            color: #4a4a4a;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .date-time {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 10px 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            font-size: 1.2em;
+            color: #ff69b4;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 100px auto 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 2s ease-in-out;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #ff69b4;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .quiz-section {
+            margin-bottom: 40px;
+        }
+
+        .quiz-question {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .option-btn {
+            background: linear-gradient(45deg, #ff69b4, #ffb6c1);
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            font-size: 1em;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .option-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .result {
+            font-size: 1.2em;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .correct {
+            color: green;
+        }
+
+        .wrong {
+            color: red;
+        }
+
+        .responses-section {
+            margin-top: 40px;
+        }
+
+        .responses-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .responses-table th, .responses-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .responses-table th {
+            background-color: rgba(255, 182, 193, 0.3);
+            color: #ff69b4;
+        }
+
+        .response-correct {
+            background-color: rgba(144, 238, 144, 0.3); /* Light green */
+        }
+
+        .response-wrong {
+            background-color: rgba(255, 182, 193, 0.3); /* Light pink */
+        }
+
+        button {
+            background: linear-gradient(45deg, #ff69b4, #ffb6c1);
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            font-size: 1em;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            margin: 5px;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        /* Floating hearts */
+        .heart {
+            position: absolute;
+            font-size: 2em;
+            color: #ff69b4;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .heart:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .heart:nth-child(2) { top: 20%; right: 15%; animation-delay: 2s; }
+        .heart:nth-child(3) { bottom: 15%; left: 20%; animation-delay: 4s; }
+        .heart:nth-child(4) { top: 30%; right: 10%; animation-delay: 1s; }
+        .heart:nth-child(5) { bottom: 20%; right: 20%; animation-delay: 3s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="heart">♥</div>
+    <div class="heart">♥</div>
+    <div class="heart">♥</div>
+    <div class="heart">♥</div>
+    <div class="heart">♥</div>
+    <div class="date-time" id="date-time"></div>
+
+    <div class="container">
+        <h1>Daily IAS Quiz, Ankita!</h1>
+        <p>Fun and random IAS-related questions fetched from online sources. Refresh for a new one!</p>
+        
+        <div class="quiz-section">
+            <div class="quiz-question" id="question">Loading question...</div>
+            <div class="options" id="options"></div>
+            <div class="result" id="result"></div>
+            <button onclick="loadNewQuestion()">New Question</button>
+            <button onclick="restartQuiz()">Restart Quiz</button>
+            <button onclick="window.location.href='Page4.html'">Next Page</button>
+        </div>
+        
+
+        <div class="responses-section">
+            <h2>Your Quiz Responses</h2>
+            <table class="responses-table" id="responses-table">
+                <thead>
+                    <tr>
+                        <th>Question</th>
+                        <th>Your Answer</th>
+                        <th>Correct Answer</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody id="responses-body">
+                    <!-- Responses will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+        
+        <button onclick="goBack()">Back to Mood Tracker</button>
+    </div>
+
+    <script>
+        // Update date and time in left corner
+        function updateDateTime() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            document.getElementById('date-time').innerText = now.toLocaleDateString('en-US', options);
+        }
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+
+        let currentQuestion = null;
+        let selectedAnswer = null;
+
+        // IAS-related categories from Open Trivia Database (opentdb.com)
+        const iasCategories = [9, 17, 18, 22, 23, 24]; // GK, Science Nature, Science Computers, Geography, History, Politics
+
+        // Function to decode HTML entities
+        function decodeHtml(html) {
+            const txt = document.createElement("textarea");
+            txt.innerHTML = html;
+            return txt.value;
+        }
+
+        // Load a new random question
+        function loadNewQuestion() {
+            const randomCategory = iasCategories[Math.floor(Math.random() * iasCategories.length)];
+            const url = `https://opentdb.com/api.php?amount=1&category=${randomCategory}&type=multiple&encode=url3986`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.results && data.results.length > 0) {
+                        const q = data.results[0];
+                        currentQuestion = {
+                            question: decodeURIComponent(q.question),
+                            options: [...q.incorrect_answers.map(ans => decodeURIComponent(ans)), decodeURIComponent(q.correct_answer)].sort(() => Math.random() - 0.5), // Shuffle options
+                            answer: decodeURIComponent(q.correct_answer)
+                        };
+                        displayQuestion();
+                    } else {
+                        document.getElementById('question').innerText = "No question available. Try again!";
+                        document.getElementById('options').innerHTML = '';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching question:', error);
+                    document.getElementById('question').innerText = "Error loading question. Check internet connection.";
+                    document.getElementById('options').innerHTML = '';
+                });
+        }
+
+        // Display the current question
+        function displayQuestion() {
+            document.getElementById('question').innerText = currentQuestion.question;
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+            currentQuestion.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = option;
+                btn.onclick = () => selectOption(option);
+                optionsDiv.appendChild(btn);
+            });
+            document.getElementById('result').style.display = 'none';
+            selectedAnswer = null;
+        }
+
+        // Select an option
+        function selectOption(option) {
+            selectedAnswer = option;
+            const isCorrect = (option === currentQuestion.answer);
+            const resultDiv = document.getElementById('result');
+            if (isCorrect) {
+                resultDiv.innerHTML = '<span class="correct">Correct! 🎉</span>';
+            } else {
+                resultDiv.innerHTML = '<span class="wrong">Wrong! The correct answer is: ' + currentQuestion.answer + '</span>';
+            }
+            resultDiv.style.display = 'block';
+
+            // Store the response
+            storeResponse(currentQuestion.question, selectedAnswer, currentQuestion.answer, isCorrect);
+            displayResponses();
+        }
+
+        // Store response in localStorage
+        function storeResponse(question, userAnswer, correctAnswer, isCorrect) {
+            let responses = JSON.parse(localStorage.getItem('quizResponses')) || [];
+            responses.push({
+                question: question,
+                userAnswer: userAnswer,
+                correctAnswer: correctAnswer,
+                isCorrect: isCorrect,
+                date: new Date().toLocaleString()
+            });
+            localStorage.setItem('quizResponses', JSON.stringify(responses));
+        }
+
+        // Display stored responses in table
+        function displayResponses() {
+            const responses = JSON.parse(localStorage.getItem('quizResponses')) || [];
+            const tbody = document.getElementById('responses-body');
+            tbody.innerHTML = '';
+            responses.forEach(response => {
+                const row = document.createElement('tr');
+                row.className = response.isCorrect ? 'response-correct' : 'response-wrong';
+                row.innerHTML = `
+                    <td>${response.question}</td>
+                    <td>${response.userAnswer}</td>
+                    <td>${response.correctAnswer}</td>
+                    <td>${response.isCorrect ? 'Correct' : 'Incorrect'}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Restart quiz: clear responses and load new question
+        function restartQuiz() {
+            if (confirm('Are you sure you want to restart? All previous responses will be cleared.')) {
+                localStorage.removeItem('quizResponses');
+                displayResponses();
+                loadNewQuestion();
+            }
+        }
+
+        // Go back to second page
+        function goBack() {
+            window.location.href = 'second.html';
+        }
+
+        // Initialize with a question on load and display existing responses
+        loadNewQuestion();
+        displayResponses();
+    </script>
+</body>
+</html>

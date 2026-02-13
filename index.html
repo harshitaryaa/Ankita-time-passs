@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello Ankita</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif; /* Girlish, playful font */
+            background: linear-gradient(135deg, #ffb3ba, #ffdfba, #ffffba, #baffc9, #bae1ff); /* Soft pastel gradient */
+            background-size: 400% 400%;
+            animation: gradientShift 10s ease infinite; /* Animated background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #4a4a4a;
+            text-align: center;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.8); /* Semi-transparent white for a dreamy effect */
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 2s ease-in-out; /* Fade in animation */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 3em;
+            color: #ff69b4; /* Hot pink for girlish vibe */
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            background: linear-gradient(45deg, #ff69b4, #ffb6c1); /* Pink gradient */
+            border: none;
+            border-radius: 25px;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+        }
+
+        button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 25px rgba(255, 105, 180, 0.6);
+        }
+
+        /* Add some floating hearts for extra girlish animation */
+        .heart {
+            position: absolute;
+            font-size: 2em;
+            color: #ff69b4;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .heart:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .heart:nth-child(2) { top: 20%; right: 15%; animation-delay: 2s; }
+        .heart:nth-child(3) { bottom: 15%; left: 20%; animation-delay: 4s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="heart">♥</div>
+    <div class="heart">♥</div>
+    <div class="heart">♥</div>
+    <div class="container">
+        <h1>Hello Ankita</h1>
+        <button onclick="start()">Click here to start</button>
+    </div>
+    <script>
+        function start() {
+           
+            alert("Welcome, Ankita! Let's begin your adventure.");
+             window.location.href = 'page1.html';
+        }
+    </script>
+</body>
+</html>
