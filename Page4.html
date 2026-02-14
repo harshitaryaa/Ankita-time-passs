@@ -81,6 +81,10 @@
             border-radius: 10px;
             background: white;
             cursor: crosshair;
+            max-width: 100%; /* Make responsive */
+            height: auto; /* Maintain aspect ratio */
+            display: block; /* Center it */
+            margin: 0 auto;
         }
 
         button {
@@ -165,32 +169,53 @@
 
         let drawing = false;
 
-        // Start drawing
-        canvas.addEventListener('mousedown', (e) => {
+        // Function to get position relative to canvas (works for both mouse and touch)
+        function getPosition(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
+        }
+
+        // Start drawing (mouse and touch)
+        function startDrawing(e) {
+            e.preventDefault(); // Prevent scrolling on touch
             drawing = true;
+            const pos = getPosition(e);
             ctx.beginPath();
-            ctx.moveTo(e.offsetX, e.offsetY);
-        });
+            ctx.moveTo(pos.x, pos.y);
+        }
 
-        // Draw
-        canvas.addEventListener('mousemove', (e) => {
-            if (drawing) {
-                ctx.lineTo(e.offsetX, e.offsetY);
-                ctx.strokeStyle = colorPicker.value;
-                ctx.lineWidth = brushSize.value;
-                ctx.lineCap = 'round';
-                ctx.stroke();
-            }
-        });
+        // Draw (mouse and touch)
+        function draw(e) {
+            if (!drawing) return;
+            e.preventDefault(); // Prevent scrolling on touch
+            const pos = getPosition(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.strokeStyle = colorPicker.value;
+            ctx.lineWidth = brushSize.value;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+        }
 
-        // Stop drawing
-        canvas.addEventListener('mouseup', () => {
+        // Stop drawing (mouse and touch)
+        function stopDrawing(e) {
             drawing = false;
-        });
+        }
 
-        canvas.addEventListener('mouseout', () => {
-            drawing = false;
-        });
+        // Mouse events (for desktop)
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+
+        // Touch events (for mobile)
+        canvas.addEventListener('touchstart', startDrawing);
+        canvas.addEventListener('touchmove', draw);
+        canvas.addEventListener('touchend', stopDrawing);
 
         // Clear canvas
         function clearCanvas() {
